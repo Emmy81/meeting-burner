@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Meeting Burner | Real-Time Meeting Cost Calculator</title>
+    
+    <!-- SEO & META TAGS -->
+    <meta name="description" content="Calculate the real-time cost of your meetings. A viral tool to visualize corporate waste and calculate meeting ROI.">
+    <meta name="keywords" content="meeting cost calculator, meeting ticker, corporate waste, burn rate, productivity">
+    <meta name="author" content="The Meeting Burner">
+
+    <!-- OPEN GRAPH (Facebook, LinkedIn, Slack) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://themeetingburner.com/">
+    <meta property="og:title" content="The Meeting Burner | Stop Burning Capital">
+    <meta property="og:description" content="🚨 We are burning cash! I just calculated the cost of this meeting. Check your team's burn rate now.">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/0f172a/ef4444?text=The+Meeting+Burner"> 
+    <!-- REPLACE THE URL ABOVE with your own hosted image for best results -->
+
+    <!-- TWITTER CARDS -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The Meeting Burner">
+    <meta name="twitter:description" content="Real-time visualization of corporate capital incineration.">
+    <meta name="twitter:image" content="https://via.placeholder.com/1200x630/0f172a/ef4444?text=The+Meeting+Burner">
+
+    <!-- FAVICON -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>">
+
+    <!-- ADSENSE PLACEHOLDER -->
+    <!-- 
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID"
+     crossorigin="anonymous"></script> 
+    -->
+
+    <style>
+        /* CSS VARIABLES & RESET */
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent: #ef4444;
+            --accent-hover: #dc2626;
+            --success: #10b981;
+            --share: #8b5cf6;
+            --border: #334155;
+            --nav-height: 60px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        a { color: var(--accent); text-decoration: none; transition: 0.3s; }
+        a:hover { color: var(--accent-hover); }
+
+        .container { width: 100%; max-width: 800px; margin: 0 auto; padding: 0 20px; }
+
+        /* NAV */
+        nav {
+            position: sticky; top: 0;
+            background-color: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            height: var(--nav-height);
+            z-index: 1000;
+            display: flex; align-items: center;
+        }
+        nav ul { display: flex; justify-content: center; list-style: none; width: 100%; gap: 20px; font-size: 0.9rem; flex-wrap: wrap; }
+        nav li a { color: var(--text-primary); font-weight: 600; }
+
+        /* ADS & LAYOUT */
+        .ad-space {
+            background-color: #2a3441; border: 1px dashed var(--text-secondary);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-secondary); font-size: 0.8rem; margin: 30px auto; text-align: center;
+        }
+        #AD_SPACE_LEADERBOARD { width: 100%; height: 90px; max-width: 728px; }
+        #AD_SPACE_IN_ARTICLE { width: 100%; height: 250px; max-width: 300px; float: right; margin-left: 20px; }
+        #AD_SPACE_SIDEBAR { width: 100%; height: 250px; margin-top: 20px; }
+
+        header { text-align: center; padding: 40px 0 20px; }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; color: var(--accent); }
+        .subtitle { color: var(--text-secondary); margin-bottom: 30px; }
+
+        /* TOOL STYLES */
+        .burner-tool {
+            background-color: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 12px; padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3); margin-bottom: 50px;
+        }
+        .inputs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 5px; }
+        .salary-wrapper { display: flex; gap: 10px; }
+        
+        input, select {
+            background: var(--bg-color); border: 1px solid var(--border);
+            color: var(--text-primary); padding: 12px; border-radius: 6px; font-size: 1rem;
+        }
+        input { width: 100%; }
+        #currency-select { width: 110px; text-align: center; cursor: pointer; }
+
+        .display-area {
+            text-align: center; padding: 20px; background: #2a0a0a;
+            border-radius: 8px; border: 1px solid #450a0a; margin-bottom: 20px;
+        }
+        .ticker-label { color: var(--accent); font-weight: bold; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;}
+        #cost-display { font-size: 3.5rem; font-weight: 800; color: var(--accent); font-family: monospace; }
+        
+        /* New Alternative Cost Ticker Style */
+        #alt-cost-display { 
+            color: var(--text-secondary); 
+            font-size: 1.1rem; 
+            margin: 5px 0 15px 0; 
+            font-style: italic; 
+            min-height: 1.6em;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        #time-display { color: var(--text-secondary); font-family: monospace; font-size: 0.9rem; }
+
+        /* BUTTONS */
+        .controls { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .btn { padding: 12px 24px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.2s; color: white;}
+        .btn:active { transform: scale(0.98); }
+        .btn-start { background-color: var(--success); }
+        .btn-stop { background-color: var(--accent); }
+        .btn-reset { background-color: var(--border); color: var(--text-primary); }
+        .btn-share { background-color: var(--share); display: flex; align-items: center; gap: 8px; }
+        .btn-share:hover { background-color: #7c3aed; }
+
+        /* CONTENT */
+        article { font-size: 1.125rem; color: #cbd5e1; }
+        article h2 { color: var(--text-primary); font-size: 1.8rem; margin: 40px 0 20px; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
+        article h3 { color: var(--text-primary); font-size: 1.4rem; margin: 30px 0 15px; }
+        article p { margin-bottom: 20px; text-align: justify; }
+
+        /* TABLE */
+        .data-table-wrapper { overflow-x: auto; margin: 30px 0; border-radius: 8px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
+        th, td { padding: 15px; border-bottom: 1px solid var(--border); }
+        th { background-color: #0f172a; color: var(--accent); text-transform: uppercase; font-size: 0.85rem; }
+
+        /* FOOTER & MODAL */
+        footer { margin-top: 60px; padding: 40px 0; border-top: 1px solid var(--border); text-align: center; color: var(--text-secondary); }
+        .footer-links button { background: none; border: none; color: var(--text-secondary); cursor: pointer; margin: 0 10px; text-decoration: underline; }
+
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: var(--card-bg); padding: 30px; border-radius: 12px; max-width: 500px; width: 90%; border: 1px solid var(--border); position: relative; }
+        .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; }
+
+        @media (max-width: 768px) {
+            .inputs-grid { grid-template-columns: 1fr; }
+            #AD_SPACE_IN_ARTICLE { float: none; width: 100%; max-width: 100%; margin: 20px 0; }
+            h1 { font-size: 2rem; }
+            #cost-display { font-size: 2.5rem; }
+            .controls { flex-direction: column; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="#tool">The Tool</a></li>
+            <li><a href="#why-cost">Why It Costs So Much</a></li>
+            <li><a href="#roi-guide">ROI Guide</a></li>
+            <li><a href="#faq">FAQ</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>The Meeting Burner</h1>
+            <p class="subtitle">Real-time visualization of corporate capital incineration.</p>
+        </header>
+
+        <div id="AD_SPACE_LEADERBOARD" class="ad-space">AD_SPACE_LEADERBOARD (728x90)</div>
+
+        <!-- TOOL -->
+        <section id="tool" class="burner-tool">
+            <div class="inputs-grid">
+                <div class="input-group">
+                    <label for="attendees">Number of Attendees</label>
+                    <input type="number" id="attendees" value="6" min="1" inputmode="numeric">
+                </div>
+                <div class="input-group">
+                    <label for="salary">Avg. Annual Salary</label>
+                    <div class="salary-wrapper">
+                        <input type="number" id="salary" value="100000" step="1000" inputmode="numeric">
+                        <select id="currency-select" aria-label="Currency Selector">
+                            <option value="USD">USD ($)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="JPY">JPY (¥)</option>
+                            <option value="CAD">CAD ($)</option>
+                            <option value="AUD">AUD ($)</option>
+                            <option value="INR">INR (₹)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="display-area">
+                <div class="ticker-label">Total Cost Burned</div>
+                <div id="cost-display">$0.00</div>
+                <!-- NEW ALTERNATIVE COST TICKER -->
+                <div id="alt-cost-display">That is equivalent to: 0 Pizzas 🍕</div>
+                <div id="time-display">00:00:00</div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-start" onclick="startTimer()">Start Meeting</button>
+                <button class="btn btn-stop" onclick="stopTimer()">Stop</button>
+                <button class="btn btn-reset" onclick="resetTimer()">Reset</button>
+                <button class="btn btn-share" id="share-btn" onclick="shareTheBurn()">
+                   🔥 Share the Burn
+                </button>
+            </div>
+        </section>
+
+        <!-- CONTENT -->
+        <main>
+            <article>
+                <h1>The $100 Million Meeting: How Modern Corporations Waste Capital</h1>
+                <p>In the modern corporate landscape, time is not just money—it is the single most volatile asset a company possesses. Yet, every day at 9:00 AM, millions of professionals gather in conference rooms (virtual and physical) to engage in a ritual that bleeds balance sheets dry: <strong>The unstructured meeting</strong>.</p>
+
+                <div id="AD_SPACE_IN_ARTICLE" class="ad-space">AD_SPACE_IN_ARTICLE<br>(300x250)</div>
+
+                <p>While collaboration is essential for innovation, the "Meeting Industrial Complex" has spiraled out of control. Studies suggest that unnecessary meetings cost U.S. businesses upwards of $37 billion annually. But the true cost isn't just in the salary dollars burned; it's in the opportunity cost of deep work, context switching, and employee morale.</p>
+
+                <h2 id="why-cost">Why It Costs So Much: The Math of The Burn</h2>
+                <p>Most managers look at a meeting on the calendar and see a one-hour block. They rarely see the invoice attached to that block. To understand the true financial impact, one must calculate the "fully loaded" cost.</p>
+                
+                <p>The calculation used in <em>The Meeting Burner</em> tool above is based on a standard work year of 2,080 hours (40 hours/week × 52 weeks). However, the real cost to the company is often 1.25x to 1.4x the base salary when factoring in benefits, taxes, and overhead. For simplicity, let's look at raw salary data.</p>
+                
+                <p>If you have 10 senior engineers in a room, each making $150,000 annually, their combined hourly rate is approximately $720. A weekly one-hour "status sync" costs the company $37,440 per year. That is the equivalent of a brand-new mid-level employee hired just to sit in a chair and listen to updates that could have been an email.</p>
+
+               <h3>The Multiplier Effect</h3>
+                <p>The cost isn't linear; it's exponential based on organizational hierarchy. When a C-Suite executive joins a meeting, the burn rate skyrockets. Below is a breakdown of how costs accumulate across different organizational roles.</p>
+
+                <!-- DATA TABLE -->
+
+                <div class="data-table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Role Tier</th>
+                                <th>Avg. Salary</th>
+                                <th>Hourly Rate</th>
+                                <th>Cost of 1hr Meeting (5 ppl)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Entry Level</td><td>$50,000</td><td>~$24.00</td><td>$120.00</td></tr>
+                            <tr><td>Mid-Level Manager</td><td>$95,000</td><td>~$45.60</td><td>$228.00</td></tr>
+                            <tr><td>Senior Specialist</td><td>$140,000</td><td>~$67.30</td><td>$336.50</td></tr>
+                            <tr><td>Director / VP</td><td>$220,000</td><td>~$105.70</td><td>$528.50</td></tr>
+                            <tr><td>C-Suite Exec</td><td>$400,000+</td><td>~$192.30+</td><td>$961.50+</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>The Psychology of Boring Meetings</h2>
+                <p>Why do we continue to hold meetings that drain our energy and our budgets? The answer lies in organizational psychology, specifically a phenomenon known as <strong>Parkinson’s Law of Triviality</strong>, also known as "bikeshedding."</p>
+                
+                <p>This law states that organizations spend disproportionate time on trivial issues because they are easy to understand, while complex, expensive issues are glossed over. A team might spend 40 minutes debating the color of a button (low context required) but only 5 minutes approving a $100,000 infrastructure migration (high technical context required).</p>
+
+                <h3>Social Loafing and The Bystander Effect</h3>
+                <p>When a meeting invite list grows beyond roughly seven people, "Social Loafing" kicks in. Attendees feel less personally responsible for the outcome of the meeting because the responsibility is diffused among the group. This results in the classic "camera off, muted, doing laundry" behavior seen in remote work environments.</p>
+                <p>The "Meeting Burner" tool is designed to make this invisible loss visible. By putting a dollar figure on the time ticking away, we leverage <strong>Loss Aversion</strong>—the psychological principle that we prefer avoiding losses to acquiring equivalent gains. Seeing the money burn creates an urgency to wrap up and get back to work.</p>
+
+                <h2 id="roi-guide">5 Strategies for High-Impact Synchs</h2>
+                <ol>
+                    <li><strong>The "Two-Pizza" Rule:</strong> If two pizzas can't feed the group, the meeting is too large.</li>
+                    <li><strong>No Agenda, No Attendance:</strong> Empower employees to decline meetings without clear outcomes.</li>
+                    <li><strong>The Silent Start:</strong> Spend the first 10 minutes reading a briefing doc in silence.</li>
+                    <li><strong>Stand-Ups Must Stand Up:</strong> Physical discomfort encourages brevity.</li>
+                    <li><strong>Audit Your Calendar:</strong> Declare "Calendar Bankruptcy" once a quarter.</li>
+                </ol>
+
+                <h2 id="faq">Frequently Asked Questions</h2>
+                <h3>How is the hourly rate calculated in the tool?</h3>
+                <p>We divide the annual salary input by 2,080 hours (the standard 40-hour work week over 52 weeks). We do not currently factor in holidays or sick leave in the base calculation, meaning the actual cost to the company is likely higher than displayed.</p>
+
+                <h3>What is a good Meeting ROI?</h3>
+                <p>A meeting has a positive ROI if the decision made or the clarity gained saves more money/time than the meeting cost to hold. If a $500 meeting prevents a $10,000 mistake, it was money well spent. If a $500 meeting results in scheduling another meeting, the ROI is negative.</p>
+
+                <h3>Does this tool save data?</h3>
+                <p>No. <em>The Meeting Burner</em> runs entirely in your browser using local JavaScript. No data is sent to any server, ensuring your salary data remains private.</p>
+
+                <p>By visualizing the cost of our time, we can begin to treat corporate attention with the respect—and frugality—it deserves. Use the tool above, audit your calendar, and stop burning capital.</p>
+
+                <div id="AD_SPACE_SIDEBAR" class="ad-space">AD_SPACE_SIDEBAR (Responsive)</div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <button onclick="openModal('privacy')">Privacy Policy</button>
+                <button onclick="openModal('terms')">Terms of Service</button>
+                <button onclick="openModal('contact')">Contact Us</button>
+            </div>
+            <p style="margin-top: 20px;">&copy; 2023 The Meeting Burner.</p>
+        </div>
+    </footer>
+
+    <!-- MODALS -->
+    <div id="modal-privacy" class="modal"><div class="modal-content"><button class="close-modal" onclick="closeAllModals()">&times;</button><h3>Privacy Policy</h3><p> At The Meeting Burner, your privacy is our priority. This tool is a client-side application; we do not collect, store, or share any personal salary data entered into the calculator. All calculations are performed locally in your browser.<br></br>
+Cookies and Web Beacons: Like any other website, The Meeting Burner uses 'cookies' via third-party vendors like Google AdSense to optimize your experience and serve relevant ads based on your visit to this and other sites. You may choose to decline cookies through your browser settings.<br></br>
+Third-Party Privacy Policies: Our Privacy Policy does not apply to other advertisers or websites. We advise you to consult the respective Privacy Policies of these third-party ad servers (like Google) for more detailed information.
+</p></div></div>
+    <div id="modal-terms" class="modal"><div class="modal-content"><button class="close-modal" onclick="closeAllModals()">&times;</button><h3>Terms of Service</h3><p>
+By using The Meeting Burner, you agree to the following:<br></br>
+1.Educational Purposes Only: This tool is for entertainment and estimation purposes. While we strive for accuracy, The Meeting Burner is not a financial accounting tool.<br></br>
+2.No Liability: Under no circumstances shall the site owners be held liable for any professional disputes, HR issues, or "awkward silences" caused by sharing these calculations in a live meeting.<br></br>
+3.Modifications: We reserve the right to update these terms at any time. Your continued use of the site constitutes acceptance of the updated terms.
+
+</p></div></div>
+    <div id="modal-contact" class="modal"><div class="modal-content"><button class="close-modal" onclick="closeAllModals()">&times;</button><h3>Contact</h3><p>Questions? Feedback? A particularly expensive meeting story?<br></br>
+Reach out to us at: hello@[yourdomain].com or follow us on [Your Social Handle].
+</p></div></div>
+
+    <script>
+        // --- TICKER VARIABLES ---
+        let timerInterval;
+        let seconds = 0;
+        let isRunning = false;
+        let currentCostTotal = 0;
+
+        const inputs = {
+            attendees: document.getElementById('attendees'),
+            salary: document.getElementById('salary'),
+            currency: document.getElementById('currency-select')
+        };
+        const display = {
+            cost: document.getElementById('cost-display'),
+            altCost: document.getElementById('alt-cost-display'),
+            time: document.getElementById('time-display')
+        };
+
+        // --- MATH LOGIC ---
+        function calculateCostPerSecond() {
+            const attendees = parseFloat(inputs.attendees.value) || 0;
+            const avgSalary = parseFloat(inputs.salary.value) || 0;
+            return (avgSalary * attendees) / (2080 * 3600); // 2080 hours/year
+        }
+
+        function formatMoney(amount) {
+            const currency = inputs.currency.value;
+            // Adjust decimals: JPY usually 0, others 2
+            const decimals = currency === 'JPY' ? 0 : 2;
+
+            return new Intl.NumberFormat('en-US', { 
+                style: 'currency', 
+                currency: currency,
+                maximumFractionDigits: decimals,
+                minimumFractionDigits: decimals
+            }).format(amount);
+        }
+
+        function formatTime(totalSeconds) {
+            const h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+            const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+            const s = (totalSeconds % 60).toString().padStart(2, '0');
+            return `${h}:${m}:${s}`;
+        }
+
+        // --- ALTERNATIVE COST LOGIC ---
+        const altItems = [
+            { name: "Large Pizzas 🍕", baseCost: 25 },
+            { name: "Month(s) of Coffee ☕", baseCost: 150 },
+            { name: "Economy Flights ✈️", baseCost: 400 },
+            { name: "High-End Laptops 💻", baseCost: 1200 },
+            { name: "Used Honda Civics 🚗", baseCost: 5000 }
+        ];
+        
+        let altItemIndex = 0;
+
+        // Approximate multiplier to adjust item cost based on currency purchasing power relative to USD
+        // e.g. A Pizza in Japan is not 25 Yen, it's approx 25 * 140 Yen.
+        const currencyMultipliers = {
+            USD: 1, EUR: 0.92, GBP: 0.79, CAD: 1.35, AUD: 1.5,
+            JPY: 150, // Approx 150 Yen to 1 USD
+            INR: 83   // Approx 83 Rupees to 1 USD
+        };
+
+        function updateAltTicker() {
+            const currentItem = altItems[altItemIndex];
+            const currency = inputs.currency.value;
+            
+            // Calculate localized item cost
+            const multiplier = currencyMultipliers[currency] || 1;
+            const localizedItemCost = currentItem.baseCost * multiplier;
+
+            // Avoid division by zero
+            let count = 0;
+            if (currentCostTotal > 0) {
+                count = (currentCostTotal / localizedItemCost).toFixed(1);
+            }
+            
+            display.altCost.innerText = `That is equivalent to: ${count} ${currentItem.name}`;
+        }
+
+        // Cycle through alternative items every 4 seconds
+        setInterval(() => {
+            altItemIndex = (altItemIndex + 1) % altItems.length;
+            updateAltTicker();
+        }, 4000);
+
+        // --- MAIN UPDATE LOOP ---
+        function updateDisplay() {
+            const costPerSecond = calculateCostPerSecond();
+            currentCostTotal = costPerSecond * seconds;
+            
+            display.cost.innerText = formatMoney(currentCostTotal);
+            display.time.innerText = formatTime(seconds);
+            
+            // Update the math on the alt ticker immediately (don't wait for cycle)
+            updateAltTicker();
+        }
+
+        function startTimer() {
+            if (isRunning) return;
+            isRunning = true;
+            timerInterval = setInterval(() => {
+                seconds++;
+                updateDisplay();
+            }, 1000);
+        }
+
+        function stopTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+        }
+
+        function resetTimer() {
+            stopTimer();
+            seconds = 0;
+            updateDisplay();
+        }
+
+        // --- SHARE LOGIC ---
+        const jokes = [
+            "This meeting could have been an email, but instead, it’s a luxury car.",
+            "Watching money vanish faster than my motivation.",
+            "We aren't just meeting; we're hosting an expensive podcast nobody listens to.",
+            "Status update: The budget is currently in the 'Incineration' phase."
+        ];
+
+        function shareTheBurn() {
+            const currentCost = display.cost.innerText;
+            const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+            
+            // Handle local testing vs production URL
+            let link = window.location.href;
+            if (link.startsWith("file:")) { link = "[TheMeetingBurner.com]"; }
+
+            const shareText = `🚨 BURN ALERT: We just burned ${currentCost} on this meeting.\n\n"${randomJoke}"\n\nCalculate your burn rate here: ${link}`;
+
+            // Robust clipboard fallback
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(shareText).then(animateShareBtn).catch(() => fallbackCopy(shareText));
+            } else {
+                fallbackCopy(shareText);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                animateShareBtn();
+            } catch (err) {
+                alert("Please manually copy:\n\n" + text);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function animateShareBtn() {
+            const btn = document.getElementById('share-btn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = "✅ Copied!";
+            btn.style.backgroundColor = "#10b981";
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.style.backgroundColor = "";
+            }, 2000);
+        }
+
+        // Event Listeners
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('input', () => {
+                // If paused, update calculation immediately on input change
+                if (!isRunning && (seconds > 0 || currentCostTotal === 0)) {
+                    updateDisplay();
+                }
+            });
+        });
+
+        // Initialize display
+        updateDisplay();
+
+        // Modal Logic
+        function openModal(id) { document.getElementById(`modal-${id}`).style.display = 'flex'; }
+        function closeAllModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
+        window.onclick = e => { if(e.target.classList.contains('modal')) closeAllModals(); };
+    </script>
+</body>
+</html>
