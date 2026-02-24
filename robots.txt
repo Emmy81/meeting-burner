@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://meeting-burner.pages.dev/sitemap.xml
